@@ -1,0 +1,45 @@
+<div style="padding: 20px; background: #f0f4ff; min-height: 100vh; margin-left: 250px;">
+    <h1 style="color: #061449;">➕ Nouveau Visa</h1>
+    <button (click)="goBack()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">
+        ← Retour
+    </button>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px;">
+        <div style="margin-bottom: 10px;">
+            <label>Type *</label>
+            <select [(ngModel)]="visa.type" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <option value="ETUDIANT">Étudiant</option>
+                <option value="TOURISTIQUE">Touristique</option>
+                <option value="SCHENGEN">Schengen</option>
+            </select>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Pays *</label>
+            <input [(ngModel)]="visa.country" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="France">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Drapeau</label>
+            <input [(ngModel)]="visa.flag" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="🇫🇷">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Description</label>
+            <textarea [(ngModel)]="visa.description" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="Description..."></textarea>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Durée</label>
+            <input [(ngModel)]="visa.duration" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="1 an">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Délai de traitement</label>
+            <input [(ngModel)]="visa.processingTime" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="15 jours">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Prix (€)</label>
+            <input [(ngModel)]="visa.price" type="number" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="1500">
+        </div>
+
+        <button (click)="onSubmit()" style="background: #061449; color: white; padding: 10px 30px; border: none; border-radius: 8px; cursor: pointer;">
+            💾 Enregistrer
+        </button>
+    </div>
+</div>

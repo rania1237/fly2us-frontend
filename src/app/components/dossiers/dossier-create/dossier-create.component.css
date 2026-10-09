@@ -1,0 +1,4 @@
+label { color: #333; }
+input, select { outline: none; }
+input:focus, select:focus { border-color: #061449 !important; }
+button:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); transition: 0.2s; }

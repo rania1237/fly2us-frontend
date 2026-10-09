@@ -1,0 +1,138 @@
+<div style="padding: 30px; background: #f0f4ff; min-height: 100vh; margin-left: 250px;">
+
+    <!-- EN-TÊTE -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <div>
+            <h1 style="font-size: 28px; color: #061449; margin: 0;">📄 Documents Requis par Visa</h1>
+            <p style="color: #888; margin: 4px 0 0;">Sélectionnez les documents nécessaires pour chaque type de visa</p>
+        </div>
+        <button (click)="toggleList()"
+                style="background: #061449; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            {{ showList ? '✖ Fermer' : '➕ Ajouter des documents' }}
+        </button>
+    </div>
+
+    <!-- MESSAGES -->
+    <div *ngIf="message" style="background: #e6ffe6; color: #059669; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ message }}
+    </div>
+    <div *ngIf="errorMessage" style="background: #fee; color: #bb0019; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ errorMessage }}
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LISTE PRÉDÉFINIE À CHOISIR -->
+    <!-- ========================================== -->
+    <div *ngIf="showList" style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid #061449;">
+
+        <h3 style="margin: 0 0 20px; color: #061449;">📋 Sélectionnez les documents à ajouter</h3>
+
+        <!-- CHOIX DU TYPE DE VISA -->
+        <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+            <label style="font-weight: 600; color: #333;">Type de visa :</label>
+            <select [(ngModel)]="selectedVisaType"
+                    style="padding: 10px 15px; border: 2px solid #061449; border-radius: 8px; outline: none; font-weight: 600;">
+                <option *ngFor="let type of visaTypes" [value]="type">{{ type }}</option>
+            </select>
+        </div>
+
+        <!-- GRILLE DE DOCUMENTS -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+            <div *ngFor="let doc of predefinedDocuments"
+                 (click)="toggleDocument(doc)"
+                 [style.border]="isSelected(doc) ? '2px solid #061449' : '2px solid #e5e7eb'"
+                 [style.background]="isSelected(doc) ? '#f0f4ff' : 'white'"
+                 style="padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; position: relative;">
+
+                <!-- Checkbox -->
+                <div style="position: absolute; top: 10px; right: 10px;">
+                    <span *ngIf="isSelected(doc)" style="background: #061449; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                        ✓
+                    </span>
+                    <span *ngIf="!isSelected(doc)" style="background: #e5e7eb; color: #999; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                        +
+                    </span>
+                </div>
+
+                <div style="font-size: 30px; margin-bottom: 8px;">{{ doc.icon }}</div>
+                <h4 style="margin: 0 0 5px; color: #061449; font-size: 15px;">{{ doc.name }}</h4>
+                <p style="margin: 0; color: #888; font-size: 12px;">{{ doc.description }}</p>
+            </div>
+        </div>
+
+        <!-- BOUTONS -->
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button (click)="addSelectedDocuments()"
+                    [disabled]="selectedDocuments.length === 0"
+                    [style.background]="selectedDocuments.length > 0 ? '#061449' : '#ccc'"
+                    style="color: white; padding: 12px 30px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
+                💾 Ajouter {{ selectedDocuments.length }} document(s)
+            </button>
+            <button (click)="toggleList()"
+                    style="background: #e5e5e5; color: #333; padding: 12px 30px; border-radius: 8px; border: none; cursor: pointer;">
+                Annuler
+            </button>
+            <span style="color: #888; margin-left: auto;">
+                {{ selectedDocuments.length }} sélectionné(s)
+            </span>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LISTE DES DOCUMENTS DÉJÀ AJOUTÉS -->
+    <!-- ========================================== -->
+    <div style="background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+        <label style="font-weight: 600; color: #333;">Filtrer par type de visa :</label>
+        <select (change)="onVisaTypeChange($event)" [value]="selectedVisaType"
+                style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+            <option *ngFor="let type of visaTypes" [value]="type">{{ type }}</option>
+        </select>
+        <span style="margin-left: auto; color: #888;">{{ filteredRequirements.length }} document(s)</span>
+    </div>
+
+    <div *ngIf="loading" style="text-align: center; padding: 50px;">⏳ Chargement...</div>
+
+    <div *ngIf="!loading" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9ff;">
+                    <th style="text-align: left; padding: 15px; color: #888; font-size: 13px;">Type de visa</th>
+                    <th style="text-align: left; padding: 15px; color: #888; font-size: 13px;">Document</th>
+                    <th style="text-align: left; padding: 15px; color: #888; font-size: 13px;">Code</th>
+                    <th style="text-align: left; padding: 15px; color: #888; font-size: 13px;">Formats</th>
+                    <th style="text-align: center; padding: 15px; color: #888; font-size: 13px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let req of filteredRequirements" style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 15px;">
+                        <span style="background: #dbeafe; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            {{ req.visaType }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <strong style="color: #061449;">{{ req.documentName }}</strong>
+                        <p style="color: #888; font-size: 12px; margin: 4px 0 0;">{{ req.description }}</p>
+                    </td>
+                    <td style="padding: 15px;">
+                        <code style="background: #f0f4ff; padding: 3px 8px; border-radius: 4px; font-size: 12px;">
+                            {{ req.documentCode }}
+                        </code>
+                    </td>
+                    <td style="padding: 15px; color: #888; font-size: 13px;">{{ req.acceptedFormats }}</td>
+                    <td style="padding: 15px; text-align: center;">
+                        <button (click)="deleteRequirement(req)"
+                                style="background: #ef4444; color: white; padding: 8px 14px; border-radius: 6px; border: none; cursor: pointer;">
+                            🗑️ Supprimer
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div *ngIf="filteredRequirements.length === 0" style="text-align: center; padding: 40px; color: #888;">
+            Aucun document pour ce type de visa
+        </div>
+    </div>
+
+</div>

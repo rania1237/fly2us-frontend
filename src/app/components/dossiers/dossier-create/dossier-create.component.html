@@ -1,0 +1,84 @@
+<div style="padding: 30px; background: #f0f4ff; min-height: 100vh; margin-left: 250px;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+        <div>
+            <h1 style="font-size: 28px; color: #061449; margin: 0;">➕ Nouveau Dossier</h1>
+            <p style="color: #888; margin: 4px 0 0;">Créez un nouveau dossier client</p>
+        </div>
+        <button (click)="goBack()" style="background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+            ← Retour
+        </button>
+    </div>
+
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <form (ngSubmit)="onSubmit()">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                
+                <!-- TYPE DE VISA -->
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Type de visa *</label>
+                    <select [(ngModel)]="dossier.type" name="type"
+                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white;">
+                        <option value="ETUDIANT">🎓 Étudiant</option>
+                        <option value="TOURISTIQUE">🏖️ Touristique</option>
+                        <option value="SCHENGEN">🛂 Schengen</option>
+                    </select>
+                </div>
+
+                <!-- ✅ PAYS (LISTE DÉROULANTE) -->
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Pays de destination *</label>
+                    <select [(ngModel)]="dossier.country" name="country" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer;">
+                        <option *ngFor="let country of countries" [value]="country">
+                            🌍 {{ country }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- PRIORITÉ -->
+                <div>
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Priorité</label>
+                    <select [(ngModel)]="dossier.priority" name="priority"
+                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white;">
+                        <option value="NORMAL">Normal</option>
+                        <option value="URGENT">Urgent</option>
+                        <option value="EXPRESS">Express</option>
+                    </select>
+                </div>
+
+                <!-- UNIVERSITÉ (uniquement pour ETUDIANT) -->
+                <div *ngIf="dossier.type === 'ETUDIANT'">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Université</label>
+                    <input [(ngModel)]="dossier.university" name="university"
+                           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"
+                           placeholder="Ex: Sorbonne">
+                </div>
+
+                <!-- PROGRAMME (uniquement pour ETUDIANT) -->
+                <div *ngIf="dossier.type === 'ETUDIANT'">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Programme</label>
+                    <input [(ngModel)]="dossier.program" name="program"
+                           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"
+                           placeholder="Ex: Master Informatique">
+                </div>
+            </div>
+
+            <!-- ERREUR -->
+            <div *ngIf="errorMessage" style="background: #fee; color: #bb0019; padding: 12px; border-radius: 8px; margin-top: 20px;">
+                {{ errorMessage }}
+            </div>
+
+            <!-- BOUTONS -->
+            <div style="margin-top: 25px; display: flex; gap: 15px;">
+                <button type="submit" [disabled]="loading"
+                        style="background: #061449; color: white; border: none; padding: 12px 40px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    {{ loading ? '⏳ Création...' : '💾 Créer le dossier' }}
+                </button>
+                <button type="button" (click)="goBack()"
+                        style="background: #e5e5e5; color: #333; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer;">
+                    Annuler
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

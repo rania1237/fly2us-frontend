@@ -1,0 +1,7 @@
+<!-- ✅ SIDEBAR GLOBAL (visible seulement si connecté) -->
+<app-sidebar *ngIf="isLoggedIn()"></app-sidebar>
+
+<!-- ✅ CONTENU DES PAGES -->
+<div [style.margin-left]="isLoggedIn() ? '250px' : '0'">
+    <router-outlet></router-outlet>
+</div>

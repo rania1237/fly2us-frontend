@@ -1,0 +1,172 @@
+<div style="padding: 30px; background: #f0f4ff; min-height: 100vh;">
+
+    <!-- En-tête -->
+    <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+        <div>
+            <h1 style="font-size: 28px; color: #061449; margin: 0;">
+                📤 Dépôt - {{ dossier?.dossierNumber }}
+            </h1>
+            <p style="color: #888; margin: 4px 0 0;">
+                {{ dossier?.type }} - {{ dossier?.country }}
+            </p>
+        </div>
+        <button (click)="goBack()" 
+                style="background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+            ← Retour
+        </button>
+    </div>
+
+    <!-- Message succès -->
+    <div *ngIf="message" style="background: #e6ffe6; color: #059669; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ message }}
+    </div>
+
+    <!-- Message erreur -->
+    <div *ngIf="errorMessage" style="background: #fee; color: #bb0019; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ errorMessage }}
+    </div>
+
+    <!-- Chargement -->
+    <div *ngIf="loading" style="text-align: center; padding: 50px; font-size: 18px;">
+        ⏳ Chargement des documents...
+    </div>
+
+    <!-- Contenu principal -->
+    <div *ngIf="!loading">
+
+        <!-- ✅ ALERTE GLOBALE : Dossier rejeté -->
+        <div *ngIf="isDossierRejected()" 
+             style="background: #fee; border-left: 4px solid #dc2626; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="margin: 0 0 10px; color: #bb0019; font-size: 18px;">
+                ⚠️ Votre dossier a été rejeté
+            </h3>
+            <p style="margin: 0 0 10px; color: #333;">
+                <strong>{{ countRejectedDocuments() }}</strong> document(s) doivent être corrigés et renvoyés.
+            </p>
+            <p *ngIf="dossier?.rejectionReason" style="margin: 0; color: #666; font-size: 14px;">
+                <strong>Motif :</strong> {{ dossier?.rejectionReason }}
+            </p>
+        </div>
+
+        <!-- Tableau des documents requis -->
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 20px; color: #061449;">
+                📋 Documents requis pour votre visa {{ dossier?.type }} - {{ dossier?.country }}
+            </h3>
+
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f8f9ff;">
+                        <th style="text-align: left; padding: 12px; color: #666; font-size: 13px;">Document</th>
+                        <th style="text-align: left; padding: 12px; color: #666; font-size: 13px;">Formats</th>
+                        <th style="text-align: left; padding: 12px; color: #666; font-size: 13px;">Statut</th>
+                        <th style="text-align: left; padding: 12px; color: #666; font-size: 13px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let req of requirements" 
+                        [style.background]="isDocumentRejected(req.id) ? '#fff5f5' : 'white'"
+                        style="border-bottom: 1px solid #f0f0f0;">
+                        
+                        <td style="padding: 15px;">
+                            <strong style="color: #061449;">{{ req.documentName }}</strong>
+                            <p style="margin: 4px 0 0; font-size: 12px; color: #888;">
+                                {{ req.description }}
+                            </p>
+
+                            <!-- ✅ AFFICHER LA RAISON DU REJET -->
+                            <div *ngIf="isDocumentRejected(req.id)" 
+                                 style="background: #fee; border-left: 3px solid #dc2626; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                                <p style="margin: 0; color: #bb0019; font-size: 13px; font-weight: 600;">
+                                    ❌ Rejeté par l'administrateur
+                                </p>
+                                <p style="margin: 5px 0 0; color: #666; font-size: 12px;">
+                                    <strong>Raison :</strong> {{ getRejectionReason(req.id) }}
+                                </p>
+                                <p style="margin: 5px 0 0; color: #bb0019; font-size: 12px; font-style: italic;">
+                                    ⚠️ Veuillez renvoyer ce document corrigé
+                                </p>
+                            </div>
+                        </td>
+
+                        <td style="padding: 15px; color: #666; font-size: 13px;">
+                            {{ req.acceptedFormats || 'PDF, JPG, PNG' }}
+                        </td>
+
+                        <td style="padding: 15px;">
+                            <!-- Rejeté -->
+                            <span *ngIf="isDocumentRejected(req.id)" 
+                                  style="color: #dc2626; font-weight: 600; font-size: 13px;">
+                                ❌ Rejeté
+                            </span>
+                            <!-- Uploadé -->
+                            <span *ngIf="!isDocumentRejected(req.id) && isDocumentUploaded(req.id)" 
+                                  style="color: #059669; font-weight: 600; font-size: 13px;">
+                                ✅ Uploadé
+                            </span>
+                            <!-- Manquant -->
+                            <span *ngIf="!isDocumentRejected(req.id) && !isDocumentUploaded(req.id)" 
+                                  style="color: #dc2626; font-weight: 600; font-size: 13px;">
+                                ❌ Manquant
+                            </span>
+                        </td>
+
+                        <td style="padding: 15px;">
+                            <label [style.background]="isDocumentRejected(req.id) ? '#dc2626' : '#061449'"
+                                   style="display: inline-block; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+                                📎 
+                                <span *ngIf="isDocumentRejected(req.id)">Renvoyer le document</span>
+                                <span *ngIf="!isDocumentRejected(req.id) && isDocumentUploaded(req.id)">Remplacer</span>
+                                <span *ngIf="!isDocumentRejected(req.id) && !isDocumentUploaded(req.id)">Choisir un fichier</span>
+                                <input type="file" 
+                                       (change)="onFileSelected($event, req)" 
+                                       [disabled]="uploading"
+                                       style="display: none;">
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Aucun document requis -->
+            <div *ngIf="requirements.length === 0" 
+                 style="text-align: center; padding: 40px; color: #888;">
+                <div style="font-size: 48px; margin-bottom: 10px;">📄</div>
+                <p>Aucun document requis pour ce type de visa.</p>
+            </div>
+        </div>
+
+        <!-- Statut global -->
+        <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <div *ngIf="isComplete" style="color: #059669; font-size: 18px; font-weight: 600;">
+                ✅ Dossier complet - Vous pouvez déposer
+            </div>
+            <div *ngIf="!isComplete" style="color: #dc2626; font-size: 18px; font-weight: 600;">
+                ⚠️ Dossier incomplet - Veuillez fournir tous les documents obligatoires
+            </div>
+            <!-- Progression -->
+            <div style="margin-top: 15px; color: #888; font-size: 14px;">
+                Progression : {{ uploadedDocuments.length }} / {{ requirements.length }} document(s)
+            </div>
+            <!-- Compteur de documents rejetés -->
+            <div *ngIf="countRejectedDocuments() > 0" style="margin-top: 10px; color: #dc2626; font-weight: 600; font-size: 14px;">
+                ❌ {{ countRejectedDocuments() }} document(s) rejeté(s) à corriger
+            </div>
+        </div>
+
+        <!-- Boutons -->
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button (click)="submitDossier()" 
+                    [disabled]="!isComplete || uploading"
+                    [style.background]="isComplete ? '#061449' : '#ccc'"
+                    [style.cursor]="isComplete ? 'pointer' : 'not-allowed'"
+                    style="color: white; padding: 15px 40px; border-radius: 8px; border: none; font-weight: 600; font-size: 16px;">
+                📤 Déposer le dossier
+            </button>
+            <button (click)="downloadPdf()" 
+                    style="background: #bb0019; color: white; padding: 15px 40px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
+                📄 Télécharger PDF
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,5 @@
+table { background: white; }
+tbody tr:hover { background: #f8f9ff; }
+button:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); transition: 0.2s; }
+button:disabled { cursor: not-allowed; }
+input[type="file"] { font-size: 13px; cursor: pointer; }

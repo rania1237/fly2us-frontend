@@ -1,0 +1,6 @@
+/* Effet survol des cartes */
+div[style*="border-radius: 10px; text-align: center;"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(6, 20, 73, 0.1) !important;
+    transition: 0.3s;
+}

@@ -1,0 +1,15 @@
+.badge-gray { background: #f3f4f6; color: #4b5563; }
+.badge-blue { background: #dbeafe; color: #1d4ed8; }
+.badge-green { background: #d1fae5; color: #059669; }
+.badge-purple { background: #f3e8ff; color: #7c3aed; }
+.badge-red { background: #fee2e2; color: #dc2626; }
+
+tbody tr:hover {
+    background: #f8f9ff;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    transition: 0.2s;
+}

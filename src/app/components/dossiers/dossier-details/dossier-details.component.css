@@ -1,0 +1,2 @@
+button:hover { opacity: 0.9; transform: translateY(-1px); transition: 0.2s; }
+p { margin: 8px 0; color: #333; }

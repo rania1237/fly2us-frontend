@@ -1,0 +1,124 @@
+<div style="padding: 30px; background: #f0f4ff; min-height: 100vh; margin-left: 250px;">
+
+    <!-- EN-TÊTE -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <div>
+            <h1 style="font-size: 28px; color: #061449; margin: 0;">💰 Gestion des Tarifs</h1>
+            <p style="color: #888; margin: 4px 0 0;">Configurez les tarifs par type de visa et priorité</p>
+        </div>
+        <button (click)="saveAll()" [disabled]="saving"
+                [style.background]="saving ? '#ccc' : '#059669'"
+                style="color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px;">
+            {{ saving ? '⏳ Enregistrement...' : '💾 Enregistrer les tarifs' }}
+        </button>
+    </div>
+
+    <!-- MESSAGES -->
+    <div *ngIf="message" style="background: #e6ffe6; color: #059669; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+        {{ message }}
+    </div>
+    <div *ngIf="errorMessage" style="background: #fee; color: #bb0019; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ errorMessage }}
+    </div>
+
+    <!-- INFO -->
+    <div style="background: #fff3cd; border-left: 4px solid #d97706; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px;">
+        <p style="margin: 0; color: #92400e;">
+            💡 <strong>Info :</strong> Modifiez directement les prix dans le tableau, puis cliquez sur <strong>"Enregistrer les tarifs"</strong>.
+            Laissez vide les tarifs non utilisés.
+        </p>
+    </div>
+
+    <div *ngIf="loading" style="text-align: center; padding: 50px;">⏳ Chargement...</div>
+
+    <!-- GRILLE 3x3 -->
+    <div *ngIf="!loading" style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9ff;">
+                    <th style="text-align: left; padding: 15px; color: #061449; font-size: 14px; border-bottom: 2px solid #061449;">
+                        Type de visa
+                    </th>
+                    <th *ngFor="let p of priorities" 
+                        style="text-align: left; padding: 15px; color: #061449; font-size: 14px; border-bottom: 2px solid #061449;">
+                        {{ p === 'NORMAL' ? '⚡' : p === 'URGENT' ? '🚨' : '🚀' }} {{ p }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let type of visaTypes" style="border-bottom: 1px solid #f0f0f0;">
+                    
+                    <!-- Type de visa -->
+                    <td style="padding: 20px; vertical-align: middle;">
+                        <span style="background: #dbeafe; color: #1d4ed8; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;">
+                            {{ type === 'ETUDIANT' ? '🎓' : type === 'TOURISTIQUE' ? '🏖️' : '🛂' }} {{ type }}
+                        </span>
+                    </td>
+
+                    <!-- Cellules par priorité -->
+                    <td *ngFor="let p of priorities" style="padding: 15px; vertical-align: top;">
+                        <div style="background: #fafbff; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                            
+                            <!-- Frais de service -->
+                            <label style="font-size: 11px; color: #888; text-transform: uppercase; display: block; margin-bottom: 3px;">
+                                Frais service (TND)
+                            </label>
+                            <input type="number" 
+                                   [(ngModel)]="tarifsMatrix[type][p].serviceFee" 
+                                   min="0" step="0.01"
+                                   style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 8px;">
+
+                            <!-- Frais TLS -->
+                            <label style="font-size: 11px; color: #888; text-transform: uppercase; display: block; margin-bottom: 3px;">
+                                Frais TLS (TND)
+                            </label>
+                            <input type="number" 
+                                   [(ngModel)]="tarifsMatrix[type][p].tlsFee" 
+                                   min="0" step="0.01"
+                                   style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 8px;">
+
+                            <!-- Total -->
+                            <div style="background: #f0f4ff; padding: 8px; border-radius: 6px; text-align: center;">
+                                <p style="margin: 0; font-size: 11px; color: #888; text-transform: uppercase;">Total</p>
+                                <p style="margin: 2px 0 0; font-size: 16px; font-weight: 700; color: #061449;">
+                                    {{ getTotal(tarifsMatrix[type][p]) | number:'1.2-2' }} TND
+                                </p>
+                            </div>
+
+                            <!-- Actif -->
+                            <div style="margin-top: 8px; display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" 
+                                       [(ngModel)]="tarifsMatrix[type][p].active" 
+                                       [id]="'active-' + type + '-' + p">
+                                <label [for]="'active-' + type + '-' + p" 
+                                       style="font-size: 12px; color: #666; cursor: pointer;">
+                                    Actif
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Aperçu -->
+        <div style="margin-top: 30px; padding: 20px; background: #f0f4ff; border-radius: 8px;">
+            <h4 style="margin: 0 0 15px; color: #061449;">📊 Aperçu des prix configurés</h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div *ngFor="let type of visaTypes" 
+                     style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #061449;">
+                    <p style="margin: 0 0 10px; font-weight: 700; color: #061449;">
+                        {{ type === 'ETUDIANT' ? '🎓' : type === 'TOURISTIQUE' ? '🏖️' : '🛂' }} {{ type }}
+                    </p>
+                    <p *ngFor="let p of priorities" style="margin: 5px 0; font-size: 13px; color: #666;">
+                        <strong>{{ p }} :</strong> 
+                        <span [style.color]="getTotal(tarifsMatrix[type][p]) > 0 ? '#059669' : '#dc2626'">
+                            {{ getTotal(tarifsMatrix[type][p]) | number:'1.2-2' }} TND
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+/* Badges de statut */
+.badge-gray { background: #f3f4f6; color: #4b5563; }
+.badge-yellow { background: #fef3c7; color: #d97706; }
+.badge-blue { background: #dbeafe; color: #1d4ed8; }
+.badge-green { background: #d1fae5; color: #059669; }
+.badge-red { background: #fee2e2; color: #dc2626; }
+
+/* Table hover */
+tbody tr:hover {
+    background: #f8f9ff;
+}
+
+/* Boutons */
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    transition: 0.2s;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Cartes hover */
+div[style*="border-left"] {
+    transition: 0.3s;
+}
+
+div[style*="border-left"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(6, 20, 73, 0.1) !important;
+}

@@ -1,0 +1,162 @@
+<div style="padding: 30px; background: #f0f4ff; min-height: 100vh;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <div>
+            <h1 style="font-size: 28px; color: #061449; margin: 0;">💳 Paiement en ligne</h1>
+            <p style="color: #888; margin: 4px 0 0;">
+                Dossier {{ dossier?.dossierNumber }} - {{ dossier?.type }} - {{ dossier?.country }}
+            </p>
+        </div>
+        <button (click)="goBack()" style="background: #6b7280; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">
+            ← Retour
+        </button>
+    </div>
+
+    <div *ngIf="message" style="background: #e6ffe6; color: #059669; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+        {{ message }}
+    </div>
+    <div *ngIf="errorMessage" style="background: #fee; color: #bb0019; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ errorMessage }}
+    </div>
+
+    <div *ngIf="loading" style="text-align: center; padding: 50px;">⏳ Chargement...</div>
+
+    <div *ngIf="!loading && !paymentDone && tarif" style="max-width: 700px; margin: 0 auto;">
+
+        <!-- RÉCAPITULATIF -->
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 20px; color: #061449;">📋 Récapitulatif</h3>
+
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                <span style="color: #666;">Type de visa</span>
+                <strong>{{ tarif.visaType }}</strong>
+            </div>
+
+            <!-- ✅ Pays du DOSSIER (plus du tarif) -->
+            <div *ngIf="dossier?.country" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                <span style="color: #666;">Pays</span>
+                <strong>🌍 {{ dossier?.country }}</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                <span style="color: #666;">Priorité</span>
+                <strong>{{ tarif.priority }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                <span style="color: #666;">Frais de service</span>
+                <span>{{ tarif.serviceFee | number:'1.2-2' }} TND</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                <span style="color: #666;">Frais TLS</span>
+                <span>{{ (tarif.tlsFee || 0) | number:'1.2-2' }} TND</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 15px 0; margin-top: 10px; border-top: 2px solid #061449;">
+                <span style="color: #061449; font-size: 18px; font-weight: 700;">TOTAL À PAYER</span>
+                <span style="color: #061449; font-size: 24px; font-weight: 700;">{{ tarif.totalAmount | number:'1.2-2' }} TND</span>
+            </div>
+        </div>
+
+        <!-- MÉTHODE -->
+        <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 20px; color: #061449;">💳 Méthode de paiement</h3>
+
+            <div style="display: grid; gap: 10px; margin-bottom: 25px;">
+                <label style="display: flex; align-items: center; gap: 10px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;"
+                       [style.border-color]="method === 'CARTE_BANCAIRE' ? '#061449' : '#ddd'"
+                       [style.background]="method === 'CARTE_BANCAIRE' ? '#f0f4ff' : 'white'">
+                    <input type="radio" [(ngModel)]="method" value="CARTE_BANCAIRE">
+                    <span style="font-weight: 600;">💳 Carte bancaire (Visa / Mastercard)</span>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 10px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;"
+                       [style.border-color]="method === 'E_DINAR' ? '#061449' : '#ddd'"
+                       [style.background]="method === 'E_DINAR' ? '#f0f4ff' : 'white'">
+                    <input type="radio" [(ngModel)]="method" value="E_DINAR">
+                    <span style="font-weight: 600;">🇹🇳 e-Dinar (Poste Tunisienne)</span>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 10px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;"
+                       [style.border-color]="method === 'VIREMENT' ? '#061449' : '#ddd'"
+                       [style.background]="method === 'VIREMENT' ? '#f0f4ff' : 'white'">
+                    <input type="radio" [(ngModel)]="method" value="VIREMENT">
+                    <span style="font-weight: 600;">🏦 Virement bancaire</span>
+                </label>
+            </div>
+
+            <!-- CARTE -->
+            <div *ngIf="method === 'CARTE_BANCAIRE'">
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Numéro de carte</label>
+                    <input type="text" [(ngModel)]="cardNumber" (input)="formatCardNumber($event)"
+                           maxlength="19" placeholder="1234 5678 9012 3456"
+                           style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; letter-spacing: 2px;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Nom du titulaire</label>
+                    <input type="text" [(ngModel)]="cardHolder" placeholder="JOHN DOE"
+                           style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label style="font-weight: 600; display: block; margin-bottom: 5px;">Expiration</label>
+                        <input type="text" [(ngModel)]="cardExpiry" placeholder="MM/AA" maxlength="5"
+                               style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div>
+                        <label style="font-weight: 600; display: block; margin-bottom: 5px;">CVV</label>
+                        <input type="password" [(ngModel)]="cardCvv" placeholder="123" maxlength="4"
+                               style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div style="background: #fff3cd; border-left: 4px solid #d97706; padding: 12px; border-radius: 6px; margin-top: 20px; font-size: 13px; color: #92400e;">
+                    🧪 <strong>Mode test</strong> : Carte commençant par <code>4000</code> = accepté, <code>4444</code> = refusé
+                </div>
+            </div>
+
+            <div *ngIf="method === 'E_DINAR'" style="background: #f0f4ff; padding: 20px; border-radius: 8px; text-align: center;">
+                <p style="margin: 0; color: #061449; font-weight: 600;">
+                    Paiement par e-Dinar (simulation)
+                </p>
+            </div>
+
+            <div *ngIf="method === 'VIREMENT'" style="background: #f0f4ff; padding: 20px; border-radius: 8px;">
+                <p style="margin: 0 0 10px; color: #061449; font-weight: 600;">Coordonnées bancaires :</p>
+                <p style="margin: 5px 0;">Banque : <strong>BIAT</strong></p>
+                <p style="margin: 5px 0;">IBAN : <strong>TN59 1234 5678 9012 3456 7890</strong></p>
+                <p style="margin: 5px 0;">Bénéficiaire : <strong>FLY2US SARL</strong></p>
+            </div>
+        </div>
+
+        <!-- BOUTON PAYER -->
+        <div style="text-align: center;">
+            <button (click)="pay()" [disabled]="processing"
+                    [style.background]="processing ? '#ccc' : '#059669'"
+                    style="color: white; padding: 18px 60px; border-radius: 8px; border: none; font-weight: 700; font-size: 18px; cursor: pointer;">
+                {{ processing ? '⏳ Traitement...' : '💳 Payer ' + (tarif.totalAmount | number:'1.2-2') + ' TND' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- SUCCÈS -->
+    <div *ngIf="paymentDone" style="max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="font-size: 72px; margin-bottom: 20px;">🎉</div>
+        <h2 style="color: #059669; margin: 0 0 15px;">Paiement confirmé !</h2>
+        <p style="color: #666; margin-bottom: 20px;">
+            Merci pour votre paiement. Un email de confirmation vous a été envoyé.
+        </p>
+
+        <div *ngIf="paymentResult" style="background: #f0f4ff; padding: 20px; border-radius: 8px; text-align: left; margin-bottom: 20px;">
+            <p style="margin: 5px 0;"><strong>N° Transaction :</strong> {{ paymentResult.transactionId }}</p>
+            <p style="margin: 5px 0;"><strong>Montant :</strong> {{ paymentResult.amount | number:'1.2-2' }} {{ paymentResult.currency }}</p>
+            <p style="margin: 5px 0;"><strong>Méthode :</strong> {{ paymentResult.method }}</p>
+        </div>
+
+        <button (click)="goBack()"
+                style="background: #061449; color: white; padding: 14px 40px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">
+            ← Retour à mes dossiers
+        </button>
+    </div>
+</div>

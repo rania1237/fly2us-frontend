@@ -1,0 +1,53 @@
+<div style="padding: 30px; background: #f0f4ff; min-height: 100vh;">
+    <div style="margin-bottom: 25px;">
+        <h1 style="font-size: 28px; color: #061449; margin: 0;">📋 Mes Dossiers</h1>
+        <p style="color: #888; margin: 4px 0 0;">Gérez vos demandes de visa</p>
+    </div>
+
+    <div *ngIf="errorMessage" style="background: #fee; color: #bb0019; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        {{ errorMessage }}
+    </div>
+
+    <div *ngIf="loading" style="text-align: center; padding: 50px;">⏳ Chargement...</div>
+
+    <div *ngIf="!loading" style="display: grid; gap: 20px;">
+        <div *ngFor="let d of dossiers" 
+             style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 style="margin: 0 0 8px; color: #061449; font-size: 18px;">📁 {{ d.dossierNumber }}</h3>
+                <p style="margin: 4px 0; color: #666;">
+                    <strong>Type :</strong> {{ d.type }} | <strong>Pays :</strong> {{ d.country }}
+                </p>
+                <span [style.background]="getStatusColor(d.status)"
+                      [style.color]="getStatusTextColor(d.status)"
+                      style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                    {{ d.status }}
+                </span>
+            </div>
+
+            <!-- ✅ BOUTONS D'ACTION -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                
+                <!-- Bouton Déposer les documents -->
+                <button (click)="deposerDossier(d.id!)"
+                        style="background: #061449; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    📤 Déposer
+                </button>
+
+                <!-- ✅ Bouton Payer (visible UNIQUEMENT si APPROUVE) -->
+                <button *ngIf="d.status === 'APPROUVE'" 
+                        (click)="payerDossier(d.id!)"
+                        style="background: #059669; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    💳 Payer
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="dossiers.length === 0" 
+             style="text-align: center; padding: 60px; background: white; border-radius: 12px; color: #888;">
+            <div style="font-size: 48px; margin-bottom: 15px;">📭</div>
+            <h3 style="margin: 0 0 10px; color: #333;">Aucun dossier</h3>
+            <p style="margin: 0;">Vous n'avez pas encore de dossier de visa.</p>
+        </div>
+    </div>
+</div>
