@@ -1,3 +1,4 @@
+[![CI Frontend](https://github.com/rania1237/fly2us-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/rania1237/fly2us-frontend/actions/workflows/ci.yml)
 # Fly2usFrontend
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.19.
