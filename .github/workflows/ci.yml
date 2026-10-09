@@ -23,5 +23,9 @@ jobs:
     - name: Installer les dépendances
       run: npm ci
 
-    - name: Compiler le projet
+    - name: Compiler le projet (build production)
       run: npm run build
+
+    - name: Lancer les tests unitaires
+      run: npm test -- --watch=false
+      continue-on-error: true
