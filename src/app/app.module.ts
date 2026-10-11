@@ -41,61 +41,57 @@ import { ClientPaiement } from './components/client-paiement/client-paiement';
 
 // ================= INTERCEPTOR =================
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ComponentName } from './component-name/component-name';
 
 @NgModule({
-    declarations: [
-        // ========== ROOT ==========
-        AppComponent,
+  declarations: [
+    // ========== ROOT ==========
+    AppComponent,
 
-        // ========== AUTH ==========
-        SignInComponent,
-        SignUpComponent,
+    // ========== AUTH ==========
+    SignInComponent,
+    SignUpComponent,
 
-        // ========== CLIENT ==========
-        DashboardComponent,
-        SidebarComponent,
-        HeaderComponent,
-        ClientMyDossiers,
+    // ========== CLIENT ==========
+    DashboardComponent,
+    SidebarComponent,
+    HeaderComponent,
+    ClientMyDossiers,
 
-        // ========== ADMIN ==========
-        AdminDashboardComponent,
-        AdminUsersComponent,
-        AdminDossiersComponent,
-        AdminDocumentsComponent,
+    // ========== ADMIN ==========
+    AdminDashboardComponent,
+    AdminUsersComponent,
+    AdminDossiersComponent,
+    AdminDocumentsComponent,
 
-        // ========== ADMIN VISA CRUD ==========
-        VisaListComponent,
-        VisaAddComponent,
-        VisaDetailsComponent,
+    // ========== ADMIN VISA CRUD ==========
+    VisaListComponent,
+    VisaAddComponent,
+    VisaDetailsComponent,
 
-        // ========== DOSSIERS ==========
-        DossierListComponent,
-        DossierCreateComponent,
-        DossierSubmitComponent,
-        DossierDetailsComponent,
+    // ========== DOSSIERS ==========
+    DossierListComponent,
+    DossierCreateComponent,
+    DossierSubmitComponent,
+    DossierDetailsComponent,
 
-        // ========== ✅ PAIEMENTS ==========
-        AdminTarifs,
-        AdminPaiements,
-        ClientPaiement,
-    ],
+    // ========== ✅ PAIEMENTS ==========
+    AdminTarifs,
+    AdminPaiements,
+    ClientPaiement,
+    ComponentName,
+  ],
 
-    imports: [
-        BrowserModule,
-        CommonModule,
-        FormsModule,
-        HttpClientModule,
-        AppRoutingModule,
-    ],
+  imports: [BrowserModule, CommonModule, FormsModule, HttpClientModule, AppRoutingModule],
 
-    providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true,
-        },
-    ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
 
-    bootstrap: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

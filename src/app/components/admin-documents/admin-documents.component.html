@@ -29,8 +29,8 @@
 
         <!-- CHOIX DU TYPE DE VISA -->
         <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
-            <label style="font-weight: 600; color: #333;">Type de visa :</label>
-            <select [(ngModel)]="selectedVisaType"
+            <label for="visaTypeSelect" style="font-weight: 600; color: #333;">Type de visa :</label>
+            <select id="visaTypeSelect" [(ngModel)]="selectedVisaType"
                     style="padding: 10px 15px; border: 2px solid #061449; border-radius: 8px; outline: none; font-weight: 600;">
                 <option *ngFor="let type of visaTypes" [value]="type">{{ type }}</option>
             </select>
@@ -82,8 +82,8 @@
     <!-- LISTE DES DOCUMENTS DÉJÀ AJOUTÉS -->
     <!-- ========================================== -->
     <div style="background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
-        <label style="font-weight: 600; color: #333;">Filtrer par type de visa :</label>
-        <select (change)="onVisaTypeChange($event)" [value]="selectedVisaType"
+        <label for="visaTypeFilter" style="font-weight: 600; color: #333;">Filtrer par type de visa :</label>
+        <select id="visaTypeFilter" (change)="onVisaTypeChange($event)" [value]="selectedVisaType"
                 style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
             <option *ngFor="let type of visaTypes" [value]="type">{{ type }}</option>
         </select>

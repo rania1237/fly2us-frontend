@@ -41,14 +41,16 @@
         </div>
 
         <!-- FILTRES -->
-        <div style="background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px;">
-            <input type="text" placeholder="🔍 Rechercher..." (input)="onSearchChange($event)"
+        <div style="background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+            <label for="dossierSearch" style="font-weight: 600; color: #555;">Rechercher :</label>
+            <input id="dossierSearch" type="text" placeholder="🔍 Rechercher..." (input)="onSearchChange($event)"
                    style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
-            <select (change)="onStatusChange($event)"
+            <label for="dossierStatusFilter" style="font-weight: 600; color: #555;">Statut :</label>
+            <select id="dossierStatusFilter" (change)="onStatusChange($event)"
                     style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
                 <option *ngFor="let s of statusList" [value]="s">{{ s }}</option>
             </select>
-            <span style="color: #888; align-self: center;">{{ filteredDossiers.length }} dossier(s)</span>
+            <span style="color: #888;">{{ filteredDossiers.length }} dossier(s)</span>
         </div>
 
         <div *ngIf="loading" style="text-align: center; padding: 50px;">⏳ Chargement...</div>

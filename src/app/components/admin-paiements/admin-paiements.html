@@ -35,8 +35,8 @@
 
     <!-- FILTRE -->
     <div style="background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
-        <label style="font-weight: 600;">Filtrer par statut :</label>
-        <select (change)="onStatusChange($event)"
+        <label for="paymentStatusFilter" style="font-weight: 600;">Filtrer par statut :</label>
+        <select id="paymentStatusFilter" (change)="onStatusChange($event)"
                 style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
             <option *ngFor="let s of statusList" [value]="s">{{ s }}</option>
         </select>

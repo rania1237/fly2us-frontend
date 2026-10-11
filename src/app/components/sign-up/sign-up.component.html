@@ -22,44 +22,44 @@
         <!-- FORMULAIRE -->
         <form (ngSubmit)="onSubmit()">
             <div style="margin-bottom: 14px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Full Name</label>
-                <input [(ngModel)]="user.fullName" name="fullName" type="text" required
+                <label for="signupFullName" style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Full Name</label>
+                <input id="signupFullName" [(ngModel)]="user.fullName" name="fullName" type="text" required
                        style="width: 100%; padding: 14px 16px; background: #f5f7fa; border: 2px solid #e8ecf1; border-radius: 10px; font-size: 15px; outline: none; box-sizing: border-box;"
                        placeholder="John Doe">
             </div>
 
             <div style="margin-bottom: 14px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Email Address</label>
-                <input [(ngModel)]="user.email" name="email" type="email" required
+                <label for="signupEmail" style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Email Address</label>
+                <input id="signupEmail" [(ngModel)]="user.email" name="email" type="email" required
                        style="width: 100%; padding: 14px 16px; background: #f5f7fa; border: 2px solid #e8ecf1; border-radius: 10px; font-size: 15px; outline: none; box-sizing: border-box;"
                        placeholder="john@example.com">
             </div>
 
             <div style="margin-bottom: 14px;">
-                <label style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Phone Number</label>
-                <input [(ngModel)]="user.phone" name="phone" type="text"
+                <label for="signupPhone" style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Phone Number</label>
+                <input id="signupPhone" [(ngModel)]="user.phone" name="phone" type="text"
                        style="width: 100%; padding: 14px 16px; background: #f5f7fa; border: 2px solid #e8ecf1; border-radius: 10px; font-size: 15px; outline: none; box-sizing: border-box;"
                        placeholder="+21600000000">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Password</label>
-                    <input [(ngModel)]="user.password" name="password" type="password" required
+                    <label for="signupPassword" style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Password</label>
+                    <input id="signupPassword" [(ngModel)]="user.password" name="password" type="password" required
                            style="width: 100%; padding: 14px 16px; background: #f5f7fa; border: 2px solid #e8ecf1; border-radius: 10px; font-size: 15px; outline: none; box-sizing: border-box;"
                            placeholder="••••••••">
                 </div>
                 <div>
-                    <label style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Confirm</label>
-                    <input [(ngModel)]="user.confirmPassword" name="confirmPassword" type="password" required
+                    <label for="signupConfirmPassword" style="display: block; font-weight: 600; font-size: 13px; color: #333; margin-bottom: 6px;">Confirm</label>
+                    <input id="signupConfirmPassword" [(ngModel)]="user.confirmPassword" name="confirmPassword" type="password" required
                            style="width: 100%; padding: 14px 16px; background: #f5f7fa; border: 2px solid #e8ecf1; border-radius: 10px; font-size: 15px; outline: none; box-sizing: border-box;"
                            placeholder="••••••••">
                 </div>
             </div>
 
             <div style="display: flex; align-items: flex-start; gap: 10px; margin: 16px 0 20px;">
-                <input type="checkbox" style="margin-top: 3px; width: 18px; height: 18px; accent-color: #061449; cursor: pointer;">
-                <label style="font-size: 13px; color: #888; cursor: pointer;">
+                <input id="signupTerms" type="checkbox" style="margin-top: 3px; width: 18px; height: 18px; accent-color: #061449; cursor: pointer;">
+                <label for="signupTerms" style="font-size: 13px; color: #888; cursor: pointer;">
                     I agree to the 
                     <a href="#" style="color: #061449; font-weight: 600; text-decoration: none;">Terms</a>
                     &amp; 

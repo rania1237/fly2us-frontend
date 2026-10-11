@@ -15,8 +15,8 @@
                 
                 <!-- TYPE DE VISA -->
                 <div>
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Type de visa *</label>
-                    <select [(ngModel)]="dossier.type" name="type"
+                    <label for="dossierType" style="font-weight: 600; display: block; margin-bottom: 5px;">Type de visa *</label>
+                    <select id="dossierType" [(ngModel)]="dossier.type" name="type"
                             style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white;">
                         <option value="ETUDIANT">🎓 Étudiant</option>
                         <option value="TOURISTIQUE">🏖️ Touristique</option>
@@ -26,8 +26,8 @@
 
                 <!-- ✅ PAYS (LISTE DÉROULANTE) -->
                 <div>
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Pays de destination *</label>
-                    <select [(ngModel)]="dossier.country" name="country" required
+                    <label for="dossierCountry" style="font-weight: 600; display: block; margin-bottom: 5px;">Pays de destination *</label>
+                    <select id="dossierCountry" [(ngModel)]="dossier.country" name="country" required
                             style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer;">
                         <option *ngFor="let country of countries" [value]="country">
                             🌍 {{ country }}
@@ -37,8 +37,8 @@
 
                 <!-- PRIORITÉ -->
                 <div>
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Priorité</label>
-                    <select [(ngModel)]="dossier.priority" name="priority"
+                    <label for="dossierPriority" style="font-weight: 600; display: block; margin-bottom: 5px;">Priorité</label>
+                    <select id="dossierPriority" [(ngModel)]="dossier.priority" name="priority"
                             style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: white;">
                         <option value="NORMAL">Normal</option>
                         <option value="URGENT">Urgent</option>
@@ -48,16 +48,16 @@
 
                 <!-- UNIVERSITÉ (uniquement pour ETUDIANT) -->
                 <div *ngIf="dossier.type === 'ETUDIANT'">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Université</label>
-                    <input [(ngModel)]="dossier.university" name="university"
+                    <label for="dossierUniversity" style="font-weight: 600; display: block; margin-bottom: 5px;">Université</label>
+                    <input id="dossierUniversity" [(ngModel)]="dossier.university" name="university"
                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"
                            placeholder="Ex: Sorbonne">
                 </div>
 
                 <!-- PROGRAMME (uniquement pour ETUDIANT) -->
                 <div *ngIf="dossier.type === 'ETUDIANT'">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Programme</label>
-                    <input [(ngModel)]="dossier.program" name="program"
+                    <label for="dossierProgram" style="font-weight: 600; display: block; margin-bottom: 5px;">Programme</label>
+                    <input id="dossierProgram" [(ngModel)]="dossier.program" name="program"
                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"
                            placeholder="Ex: Master Informatique">
                 </div>

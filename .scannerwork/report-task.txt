@@ -1,0 +1,6 @@
+projectKey=FLY2US--Frontend
+serverUrl=http://localhost:9000
+serverVersion=26.9.0.129388
+dashboardUrl=http://localhost:9000/dashboard?id=FLY2US--Frontend
+ceTaskId=2d8bf106-e4a1-47af-9247-822053a0537f
+ceTaskUrl=http://localhost:9000/api/ce/task?id=2d8bf106-e4a1-47af-9247-822053a0537f

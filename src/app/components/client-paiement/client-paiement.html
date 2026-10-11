@@ -64,21 +64,21 @@
                 <label style="display: flex; align-items: center; gap: 10px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;"
                        [style.border-color]="method === 'CARTE_BANCAIRE' ? '#061449' : '#ddd'"
                        [style.background]="method === 'CARTE_BANCAIRE' ? '#f0f4ff' : 'white'">
-                    <input type="radio" [(ngModel)]="method" value="CARTE_BANCAIRE">
+                    <input type="radio" [(ngModel)]="method" value="CARTE_BANCAIRE" name="paymentMethod">
                     <span style="font-weight: 600;">💳 Carte bancaire (Visa / Mastercard)</span>
                 </label>
 
                 <label style="display: flex; align-items: center; gap: 10px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;"
                        [style.border-color]="method === 'E_DINAR' ? '#061449' : '#ddd'"
                        [style.background]="method === 'E_DINAR' ? '#f0f4ff' : 'white'">
-                    <input type="radio" [(ngModel)]="method" value="E_DINAR">
+                    <input type="radio" [(ngModel)]="method" value="E_DINAR" name="paymentMethod">
                     <span style="font-weight: 600;">🇹🇳 e-Dinar (Poste Tunisienne)</span>
                 </label>
 
                 <label style="display: flex; align-items: center; gap: 10px; padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;"
                        [style.border-color]="method === 'VIREMENT' ? '#061449' : '#ddd'"
                        [style.background]="method === 'VIREMENT' ? '#f0f4ff' : 'white'">
-                    <input type="radio" [(ngModel)]="method" value="VIREMENT">
+                    <input type="radio" [(ngModel)]="method" value="VIREMENT" name="paymentMethod">
                     <span style="font-weight: 600;">🏦 Virement bancaire</span>
                 </label>
             </div>
@@ -86,27 +86,27 @@
             <!-- CARTE -->
             <div *ngIf="method === 'CARTE_BANCAIRE'">
                 <div style="margin-bottom: 15px;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Numéro de carte</label>
-                    <input type="text" [(ngModel)]="cardNumber" (input)="formatCardNumber($event)"
+                    <label for="cardNumber" style="font-weight: 600; display: block; margin-bottom: 5px;">Numéro de carte</label>
+                    <input id="cardNumber" type="text" [(ngModel)]="cardNumber" (input)="formatCardNumber($event)"
                            maxlength="19" placeholder="1234 5678 9012 3456"
                            style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; letter-spacing: 2px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Nom du titulaire</label>
-                    <input type="text" [(ngModel)]="cardHolder" placeholder="JOHN DOE"
+                    <label for="cardHolder" style="font-weight: 600; display: block; margin-bottom: 5px;">Nom du titulaire</label>
+                    <input id="cardHolder" type="text" [(ngModel)]="cardHolder" placeholder="JOHN DOE"
                            style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div>
-                        <label style="font-weight: 600; display: block; margin-bottom: 5px;">Expiration</label>
-                        <input type="text" [(ngModel)]="cardExpiry" placeholder="MM/AA" maxlength="5"
+                        <label for="cardExpiry" style="font-weight: 600; display: block; margin-bottom: 5px;">Expiration</label>
+                        <input id="cardExpiry" type="text" [(ngModel)]="cardExpiry" placeholder="MM/AA" maxlength="5"
                                style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;">
                     </div>
                     <div>
-                        <label style="font-weight: 600; display: block; margin-bottom: 5px;">CVV</label>
-                        <input type="password" [(ngModel)]="cardCvv" placeholder="123" maxlength="4"
+                        <label for="cardCvv" style="font-weight: 600; display: block; margin-bottom: 5px;">CVV</label>
+                        <input id="cardCvv" type="password" [(ngModel)]="cardCvv" placeholder="123" maxlength="4"
                                style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;">
                     </div>
                 </div>
